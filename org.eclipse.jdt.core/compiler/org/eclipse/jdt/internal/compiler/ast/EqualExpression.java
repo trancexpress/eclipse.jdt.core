@@ -842,8 +842,18 @@ public class EqualExpression extends BinaryExpression {
 	}
 
 	@Override
-	protected boolean isOptimizedNullComparison() {
-		return this.left instanceof NullLiteral &&  this.right instanceof NullLiteral;
+	protected Constant optimizedNullComparisonConstant() {
+		int operator = (this.bits & ASTNode.OperatorMASK) >> ASTNode.OperatorSHIFT;
+		if (operator == OperatorIds.EQUAL_EQUAL) {
+			if (this.left instanceof NullLiteral && this.right instanceof NullLiteral) {
+				return BooleanConstant.fromValue(true);
+			}
+		} else if (operator == OperatorIds.NOT_EQUAL) {
+			if (this.left instanceof NullLiteral && this.right instanceof NullLiteral) {
+				return BooleanConstant.fromValue(false);
+			}
+		}
+		return Constant.NotAConstant;
 	}
 
 	@Override
