@@ -840,6 +840,12 @@ public class EqualExpression extends BinaryExpression {
 	public boolean isCompactableOperation() {
 		return false;
 	}
+
+	@Override
+	protected boolean isOptimizedNullComparison() {
+		return this.left instanceof NullLiteral &&  this.right instanceof NullLiteral;
+	}
+
 	@Override
 	public TypeBinding resolveType(BlockScope scope) {
 

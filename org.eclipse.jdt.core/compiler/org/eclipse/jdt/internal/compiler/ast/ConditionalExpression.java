@@ -252,7 +252,11 @@ public FlowInfo analyseCode(BlockScope currentScope, FlowContext flowContext,
 		}
 		Constant cst = this.condition.optimizedBooleanConstant();
 		boolean needTruePart = !(cst != Constant.NotAConstant && cst.booleanValue() == false);
-		boolean needFalsePart = 	!(cst != Constant.NotAConstant && cst.booleanValue() == true);
+		boolean needFalsePart = !(cst != Constant.NotAConstant && cst.booleanValue() == true);
+
+		if (needFalsePart) {
+			needFalsePart = !this.condition.isOptimizedNullComparison();
+		}
 		endifLabel = new BranchLabel(codeStream);
 
 		// Generate code for the condition

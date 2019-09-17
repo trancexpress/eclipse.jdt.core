@@ -5942,16 +5942,50 @@ public class ClassFile implements TypeConstants, TypeIds {
 	private TypeBinding getANewArrayTypeBinding(char[] typeConstantPoolName, Scope scope) {
 		if (typeConstantPoolName[0] == '[') {
 			int dimensions = getDimensions(typeConstantPoolName);
-			// array of object types
-			TypeBinding type = (TypeBinding) scope.getTypeOrPackage(
-				CharOperation.splitOn('/', CharOperation.subarray(typeConstantPoolName, dimensions + 1, typeConstantPoolName.length - 1)));
-			if (!type.isValidBinding()) {
-				ProblemReferenceBinding problemReferenceBinding = (ProblemReferenceBinding) type;
-				if ((problemReferenceBinding.problemId() & ProblemReasons.InternalNameProvided) != 0) {
-					type = problemReferenceBinding.closestMatch();
+			if (typeConstantPoolName.length - dimensions == 1) {
+				// array of base types
+				TypeBinding baseType = null;
+				switch(typeConstantPoolName[typeConstantPoolName.length - 1]) {
+					case 'Z':
+						baseType = TypeBinding.BOOLEAN;
+						break;
+					case 'B':
+						baseType = TypeBinding.BYTE;
+						break;
+					case 'C':
+						baseType = TypeBinding.CHAR;
+						break;
+					case 'D':
+						baseType = TypeBinding.DOUBLE;
+						break;
+					case 'F':
+						baseType = TypeBinding.FLOAT;
+						break;
+					case 'I':
+						baseType = TypeBinding.INT;
+						break;
+					case 'J':
+						baseType = TypeBinding.LONG;
+						break;
+					case 'S':
+						baseType = TypeBinding.SHORT;
+						break;
+					case 'V':
+						baseType = TypeBinding.VOID;
 				}
+				return scope.createArrayType(baseType, dimensions);
+			} else {
+				// array of object types
+				TypeBinding type = (TypeBinding) scope.getTypeOrPackage(
+					CharOperation.splitOn('/', CharOperation.subarray(typeConstantPoolName, dimensions + 1, typeConstantPoolName.length - 1)));
+				if (!type.isValidBinding()) {
+					ProblemReferenceBinding problemReferenceBinding = (ProblemReferenceBinding) type;
+					if ((problemReferenceBinding.problemId() & ProblemReasons.InternalNameProvided) != 0) {
+						type = problemReferenceBinding.closestMatch();
+					}
+				}
+				return scope.createArrayType(type, dimensions);
 			}
-			return scope.createArrayType(type, dimensions);
 		} else {
 			TypeBinding type = (TypeBinding) scope.getTypeOrPackage(
 				CharOperation.splitOn('/', CharOperation.subarray(typeConstantPoolName, 0, typeConstantPoolName.length)));
