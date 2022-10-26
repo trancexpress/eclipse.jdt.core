@@ -230,6 +230,9 @@ public abstract class AbstractIndexer implements IIndexConstants {
 	public void addMethodReference(char[] methodName, int argCount) {
 		addIndexEntry(METHOD_REF, MethodPattern.createIndexKey(methodName, argCount));
 	}
+	public void addMethodReferenceUnresolved(char[] methodName) {
+		addIndexEntry(METHOD_REF_UNRESOLVED, MethodPattern.createIndexKey(methodName, 0));
+	}
 	public void addModuleDeclaration(char[] moduleName) {
 		addIndexEntry(MODULE_DECL, ModulePattern.createIndexKey(moduleName));
 	}

@@ -4687,6 +4687,41 @@ public void testAnonymousTypeMethodReferenceSearchGh432() throws Exception {
 		deleteProject(testProjectName);
 	}
 }
+/*
+ * Test that we can find method references despite creating source files "out-of-order".
+ * https://github.com/eclipse-jdt/eclipse.jdt.core/issues/438
+ */
+public void testMethodReferenceSearchGh438() throws Exception {
+	try {
+		String fileContent1 = "package p;\n" +
+				"class TestGh438_Type1 {\n" +
+				"  void printName() {\n" +
+				"    System.out.println(\"hello world\");\n" +
+				"  }\n" +
+				"}";
+		String fileContent2 = "package p;\n" +
+				"class TestGh438_Type2 {\n" +
+				"  void print() {\n" +
+				"    java.util.List<TestGh438_Type1> users = new java.util.ArrayList<>();\n" +
+				"    users.forEach(TestGh438_Type1::printName);\n" +
+				"  }\n" +
+				"}";
+		String expectedResults = "print() (not open) {key=Lp/TestGh438_Type2;.print()V} [in TestGh438_Type2 [in TestGh438_Type2.java [in p [in src [in P]]]]]";
+		IJavaProject p = createJavaProject("P", new String[] {"src"}, new String[0], "bin", JavaCore.VERSION_11);
+		createFolder("/P/src/p");
+		createFile("/P/src/p/TestGh438_Type2.java", fileContent2);
+		createFile("/P/src/p/TestGh438_Type1.java", fileContent1);
+		waitUntilIndexesReady();
+
+		IMethod testMethod = findMethod(p, "p.TestGh438_Type1", "printName");
+		String foundReferences = searchForMethodReferences(testMethod);
+		assertFalse("Expected search to find references of method: " + testMethod + ", in snippet:\n" + fileContent1, foundReferences.isEmpty());
+		List<String> results = Arrays.asList(foundReferences.split(System.lineSeparator()));
+		assertEquals("Unexpected search result for snippets:\n" + fileContent2 + "\n" + fileContent1, expectedResults, String.join(System.lineSeparator(), results));
+	} finally {
+		deleteProject("P");
+	}
+}
 private static String searchForMethodReferences(IMethod testMethod) throws CoreException {
 	class JavaSearchResultCollector extends SearchRequestor {
 		private final StringBuilder result = new StringBuilder();

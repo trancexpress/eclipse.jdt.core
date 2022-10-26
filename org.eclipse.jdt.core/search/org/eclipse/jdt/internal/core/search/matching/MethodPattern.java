@@ -51,7 +51,7 @@ char[][][][] parametersTypeArguments;
 boolean methodParameters = false;
 char[][] methodArguments;
 
-protected static char[][] REF_CATEGORIES = { METHOD_REF };
+protected static char[][] REF_CATEGORIES = { METHOD_REF, METHOD_REF_UNRESOLVED };
 protected static char[][] REF_AND_DECL_CATEGORIES = { METHOD_REF, METHOD_DECL };
 protected static char[][] DECL_CATEGORIES = { METHOD_DECL };
 

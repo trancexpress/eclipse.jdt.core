@@ -260,6 +260,7 @@ public class SourceIndexer extends AbstractIndexer implements ITypeRequestor, Su
 							SourceIndexer.this.addConstructorReference(binding.declaringClass.sourceName(), binding.parameters.length);
 					} else {
 						if (DEBUG) System.out.println("\tnull/bad binding in reference expression"); //$NON-NLS-1$
+						SourceIndexer.this.addMethodReferenceUnresolved(referenceExpression.selector);
 					}
 				}
 			}
