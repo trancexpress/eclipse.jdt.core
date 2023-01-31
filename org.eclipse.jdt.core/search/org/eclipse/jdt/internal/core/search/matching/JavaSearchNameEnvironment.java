@@ -26,6 +26,7 @@ import java.util.stream.Collectors;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IModuleDescription;
@@ -281,7 +282,16 @@ private ClasspathLocation mapToClassPathLocation(JavaModelManager manager, Packa
 	}
 	JavaProject javaProject = root.getJavaProject();
 	if (isComplianceJava9OrHigher(javaProject)) {
-		addModuleClassPathInfo(root, defaultModule, cp);
+		boolean isOnModulePath = true; // if an exception occurs, assume yes
+		try {
+			IClasspathEntry classpathEntry = root.getRawClasspathEntry();
+			isOnModulePath = ClasspathEntry.isModular(classpathEntry);
+		} catch (JavaModelException e) {
+			Util.log(e, "Error checking whether PackageFragmentRoot is on module path!"); //$NON-NLS-1$
+		}
+		if (isOnModulePath) {
+			addModuleClassPathInfo(root, defaultModule, cp);
+		}
 	}
 	return cp;
 }

@@ -15414,6 +15414,72 @@ public void testMethodReferenceAfterCompileErrorBugGh438() throws Exception {
 	}
 }
 
+/*
+ * Test that having a module conflict in projects that are on the compile classpath
+ * (and not the compile module path) doesn't affect searching for types in those projects.
+ * https://github.com/eclipse-jdt/eclipse.jdt.core/issues/675
+ */
+public void testModuleConflictForClasspathProjectsBugGh675() throws Exception {
+	String project1Name = "gh675ModuleConflictForClasspathProjectsBugProject";
+	String project2Name = "gh675ModuleConflictForClasspathProjectsBugProjectWithModule";
+	String project3Name = "gh675ModuleConflictForClasspathProjectsBugProjectWithoutModule";
+	try {
+		IJavaProject project1 = createJava11Project(project1Name, new String[] {"src"});
+		setUpProjectCompliance(project1, "11", true);
+		String packageFolder1 = "/" + project1Name + "/src/test/";
+		createFolder(packageFolder1);
+		String snippet1 = "package test;\n" +
+				"import testpackage.TestClass;\n" +
+				"public class Test {\n" +
+				"  public TestClass testField = null;\n" +
+				"  public void testMethod() {\n" +
+				"      System.out.println(testField);\n" +
+				"  }\n" +
+				"}";
+		createFile(packageFolder1 + "/Test.java", snippet1);
+
+		String ambiguousTypeDefinition = "package testpackage;\n" +
+				"public class TestClass {\n" +
+				"}";
+
+		IJavaProject project2 = createJava11Project(project2Name, new String[] {"src"});
+		setUpProjectCompliance(project2, "11", true);
+		String packageFolder2 =  "/" + project2Name + "/src/testpackage/";
+		createFolder(packageFolder2);
+		createFile(packageFolder2 + "/TestClass.java", ambiguousTypeDefinition);
+		String moduleInfoContents = "module TestProjectWithModule {\n" +
+				"  exports testpackage;\n" +
+				"}";
+		createFile("/" + project2Name + "/src/module-info.java", moduleInfoContents);
+
+		IJavaProject project3 = createJava11Project(project3Name, new String[] {"src"});
+		setUpProjectCompliance(project3, "11", true);
+		String packageFolder3 =  "/" + project3Name + "/src/testpackage/";
+		createFolder(packageFolder3);
+		createFile(packageFolder3 + "/TestClass.java", ambiguousTypeDefinition);
+
+		IClasspathEntry[] oldClasspath = project1.getRawClasspath();
+		IClasspathEntry[] newClasspath = Arrays.copyOf(oldClasspath, oldClasspath.length + 2);
+		newClasspath[oldClasspath.length + 0] = JavaCore.newProjectEntry(project2.getPath());
+		newClasspath[oldClasspath.length + 1] = JavaCore.newProjectEntry(project3.getPath());
+		project1.setRawClasspath(newClasspath, new NullProgressMonitor());
+
+		buildAndExpectNoProblems(project2, project3, project1);
+
+		IType type = project1.findType("test.Test");
+
+		IField field = type.getField("testField");
+		search(field, REFERENCES, EXACT_RULE, SearchEngine.createWorkspaceScope(), this.resultCollector);
+		assertSearchResults(
+				"src/test/Test.java void test.Test.testMethod() [testField] EXACT_MATCH");
+	} finally {
+		JavaCore.setOptions(getDefaultJavaCoreOptions());
+		deleteProject(project1Name);
+		deleteProject(project2Name);
+		deleteProject(project3Name);
+	}
+}
+
 private void buildAndExpectProblems(IJavaProject javaProject, String expectedMarkers) throws CoreException {
 	IProject project = javaProject.getProject();
 	project.build(IncrementalProjectBuilder.AUTO_BUILD, new NullProgressMonitor());

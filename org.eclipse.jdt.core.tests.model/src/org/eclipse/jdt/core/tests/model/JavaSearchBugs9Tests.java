@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IJavaProject;
@@ -199,7 +198,7 @@ public void testBug501162_001() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    exports pack1 to second;\n" +
@@ -212,7 +211,7 @@ public void testBug501162_001() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -250,7 +249,7 @@ public void testBug501162_002() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    exports pack1 to second;\n" +
@@ -265,7 +264,7 @@ public void testBug501162_002() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -305,7 +304,7 @@ public void testBug501162_003() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -319,7 +318,7 @@ public void testBug501162_003() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first;\n" +
@@ -380,7 +379,7 @@ public void testBug501162_006() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -394,7 +393,7 @@ public void testBug501162_006() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first;\n" +
@@ -429,7 +428,7 @@ public void testBug501162_007() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first.test.org {\n" +
 			"    requires second;" +
@@ -443,7 +442,7 @@ public void testBug501162_007() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first.test.org;\n" +
@@ -478,7 +477,6 @@ public void testBug501162_008() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -492,7 +490,7 @@ public void testBug501162_008() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first;\n" +
@@ -504,6 +502,7 @@ public void testBug501162_008() throws Exception {
 				"public interface I22 {}\n");
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -528,7 +527,6 @@ public void testBug501162_009() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    exports pack1;\n" +
@@ -547,7 +545,7 @@ public void testBug501162_009() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -555,6 +553,7 @@ public void testBug501162_009() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -585,7 +584,7 @@ public void testBug501162_010() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -599,7 +598,7 @@ public void testBug501162_010() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first, zero;\n" +
@@ -634,7 +633,7 @@ public void testBug501162_011() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -648,7 +647,7 @@ public void testBug501162_011() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    opens pack22 to first, zero;\n" +
@@ -682,7 +681,6 @@ public void testBug501162_012() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    exports pack1 to one;\n" +
@@ -700,7 +698,7 @@ public void testBug501162_012() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -708,6 +706,7 @@ public void testBug501162_012() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -737,7 +736,6 @@ public void testBug501162_013() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    opens pack1 to one;\n" +
@@ -755,7 +753,7 @@ public void testBug501162_013() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -763,6 +761,7 @@ public void testBug501162_013() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -792,7 +791,6 @@ public void testBug501162_014() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    opens pack1;\n" +
@@ -810,7 +808,7 @@ public void testBug501162_014() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -818,6 +816,7 @@ public void testBug501162_014() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -847,7 +846,6 @@ public void testBug501162_015() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    opens pack1;\n" +
@@ -865,7 +863,7 @@ public void testBug501162_015() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -873,6 +871,7 @@ public void testBug501162_015() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -902,7 +901,6 @@ public void testBug501162_016() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    opens pack1 to one;\n" +
@@ -920,7 +918,7 @@ public void testBug501162_016() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -928,6 +926,7 @@ public void testBug501162_016() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -957,7 +956,6 @@ public void testBug501162_017() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    exports pack1 to one;\n" +
@@ -975,7 +973,7 @@ public void testBug501162_017() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -983,6 +981,7 @@ public void testBug501162_017() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -1012,7 +1011,6 @@ public void testBug501162_018() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    opens pack2;\n" +
@@ -1029,7 +1027,7 @@ public void testBug501162_018() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    requires first;\n" +
@@ -1037,6 +1035,7 @@ public void testBug501162_018() throws Exception {
 		createFile("/second/src/module-info.java",	secondFile);
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -1066,7 +1065,6 @@ public void testBug501162_019() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1082,6 +1080,7 @@ public void testBug501162_019() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("pack.one",
@@ -1105,7 +1104,6 @@ public void testBug501162_020() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1121,6 +1119,7 @@ public void testBug501162_020() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("pack.two",
@@ -1145,7 +1144,6 @@ public void testBug501162_021() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1161,6 +1159,7 @@ public void testBug501162_021() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("pack.three",
@@ -1185,7 +1184,6 @@ public void testBug501162_022() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1201,6 +1199,7 @@ public void testBug501162_022() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("java.base",
@@ -1222,7 +1221,7 @@ public void testBug501162_023() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1260,7 +1259,7 @@ public void testBug501162_024() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1297,7 +1296,7 @@ public void testBug501162_025() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1334,7 +1333,7 @@ public void testBug501162_026() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1371,7 +1370,6 @@ public void testBug501162_027() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1387,6 +1385,7 @@ public void testBug501162_027() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("XOne",
@@ -1410,7 +1409,6 @@ public void testBug501162_028() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1426,6 +1424,7 @@ public void testBug501162_028() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("XFourOne",
@@ -1447,7 +1446,6 @@ public void testBug501162_029() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1463,6 +1461,7 @@ public void testBug501162_029() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("ITwo",
@@ -1487,7 +1486,6 @@ public void testBug501162_030() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1503,6 +1501,7 @@ public void testBug501162_030() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("IThreeOne",
@@ -1524,7 +1523,6 @@ public void testBug501162_031() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1540,6 +1538,7 @@ public void testBug501162_031() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("XThreeOne",
@@ -1561,7 +1560,6 @@ public void testBug501162_032() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1577,6 +1575,7 @@ public void testBug501162_032() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("zero",
@@ -1598,7 +1597,7 @@ public void testBug501162_033() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1637,7 +1636,7 @@ public void testBug501162_034() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1677,7 +1676,7 @@ public void testBug501162_035() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1717,7 +1716,7 @@ public void _testBug501162_036() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1754,7 +1753,7 @@ public void testBug501162_037() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1792,7 +1791,7 @@ public void testBug501162_038() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1829,7 +1828,7 @@ public void testBug501162_039() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1866,7 +1865,7 @@ public void testBug501162_040() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1903,7 +1902,6 @@ public void testBug501162_041() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1919,6 +1917,7 @@ public void testBug501162_041() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero.src.501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("XOne",
@@ -1942,7 +1941,7 @@ public void testBug501162_042() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1979,7 +1978,6 @@ public void testBug501162_043() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -1995,6 +1993,7 @@ public void testBug501162_043() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero.src.501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("ITwo",
@@ -2021,7 +2020,7 @@ public void testBug501162_044() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -2059,7 +2058,6 @@ public void testBug501162_045() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -2075,6 +2073,7 @@ public void testBug501162_045() throws Exception {
 				"    public XOne X1;\n" +
 				"}\n");
 		addLibraryEntry(project1, "/JavaSearchBugs/lib/bzero.src.501162.jar", false);
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project1.open(null);
 		SearchPattern pattern = SearchPattern.createPattern("XThreeOne",
@@ -2096,7 +2095,7 @@ public void testBug501162_046() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module zerotest {\n" +
 			"    requires zero;\n" +
@@ -2133,7 +2132,7 @@ public void _testBug501162_047() throws Exception {
 	try {
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 				"package pack.top;\n" +
 				"import pack.first.Y;\n" +
@@ -2150,7 +2149,7 @@ public void _testBug501162_047() throws Exception {
 
 		IJavaProject project2 = createJavaProject("split.first", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String file =
 				"module split.first {\n" +
 				"    exports  pack.first;\n" +
@@ -2206,7 +2205,7 @@ public void testBug519211_001() throws CoreException {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -2220,7 +2219,7 @@ public void testBug519211_001() throws CoreException {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first;\n" +
@@ -2258,7 +2257,6 @@ public void testBug519980_001() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -2272,7 +2270,7 @@ public void testBug519980_001() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first;\n" +
@@ -2284,6 +2282,7 @@ public void testBug519980_001() throws Exception {
 				"public interface I22 {}\n");
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -2306,7 +2305,6 @@ public void testBug519980_002() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
 		String fileContent =
 			"module first {\n" +
 			"    requires second;" +
@@ -2320,7 +2318,7 @@ public void testBug519980_002() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"    exports pack22 to first;\n" +
@@ -2332,6 +2330,7 @@ public void testBug519980_002() throws Exception {
 				"public interface I22 {}\n");
 
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		makeClasspathModular(project1);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -2355,6 +2354,7 @@ public void testBug520477_001() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src", "src2"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    exports pack1;\n" +
@@ -2502,7 +2502,7 @@ public void testBug519151_004() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -2514,7 +2514,7 @@ public void testBug519151_004() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -2551,7 +2551,7 @@ public void testBug519151_005() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -2563,7 +2563,7 @@ public void testBug519151_005() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -2600,7 +2600,7 @@ public void testBug519151_006() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -2612,7 +2612,7 @@ public void testBug519151_006() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -2648,7 +2648,7 @@ public void testBug519151_007() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -2660,7 +2660,7 @@ public void testBug519151_007() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		createFolder("/second/src/pack");
 		createFile("/second/src/pack/X.java",
 				"package pack;\n" +
@@ -2692,7 +2692,7 @@ public void testBug519151_008() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		createFolder("/JavaSearchBugs9/src/pack");
 		createFile("/JavaSearchBugs9/src/pack/X.java",
 				"package pack;\n" +
@@ -2700,7 +2700,7 @@ public void testBug519151_008() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		createFolder("/second/src/pack");
 		createFile("/second/src/pack/X.java",
 				"package pack;\n" +
@@ -2732,7 +2732,7 @@ public void testBug519151_009() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -2744,7 +2744,7 @@ public void testBug519151_009() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -2781,7 +2781,7 @@ public void testBug519151_010() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -2793,7 +2793,7 @@ public void testBug519151_010() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -2830,7 +2830,7 @@ public void testBug519151_011() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -2842,7 +2842,7 @@ public void testBug519151_011() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -2880,7 +2880,7 @@ public void testBug519151_012() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -2892,7 +2892,7 @@ public void testBug519151_012() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -2929,7 +2929,7 @@ public void testBug519151_013() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"    requires second;\n" +
@@ -2942,7 +2942,7 @@ public void testBug519151_013() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -2978,7 +2978,7 @@ public void testBug519151_014() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"    requires mod.second {\n" +
@@ -2991,7 +2991,7 @@ public void testBug519151_014() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"    requires third;\n" +
@@ -3005,7 +3005,7 @@ public void testBug519151_014() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3044,7 +3044,7 @@ public void testBug519151_015() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"    requires mod.second {\n" +
@@ -3057,7 +3057,7 @@ public void testBug519151_015() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"    requires third;\n" +
@@ -3071,7 +3071,7 @@ public void testBug519151_015() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3111,7 +3111,7 @@ public void testBug519151_016() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"    requires mod.second {\n" +
@@ -3124,7 +3124,7 @@ public void testBug519151_016() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"    requires third;\n" +
@@ -3138,7 +3138,7 @@ public void testBug519151_016() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3175,7 +3175,7 @@ public void testBug519151_017() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"    requires mod.second {\n" +
@@ -3188,7 +3188,7 @@ public void testBug519151_017() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"    requires third;\n" +
@@ -3202,7 +3202,7 @@ public void testBug519151_017() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3246,7 +3246,7 @@ public void testBug519151_018() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3259,7 +3259,7 @@ public void testBug519151_018() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		createFile("/third/src/X.java",
 				"public class X {}\n");
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project3.getPath()));
@@ -3298,7 +3298,7 @@ public void testBug519151_019() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3311,7 +3311,7 @@ public void testBug519151_019() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		createFile("/third/src/X.java",
 				"public class X {}\n");
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project3.getPath()));
@@ -3350,7 +3350,7 @@ public void testBug519151_020() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3363,7 +3363,7 @@ public void testBug519151_020() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		createFile("/third/src/X.java",
 				"public class X {}\n");
 		addClasspathEntry(project1, JavaCore.newProjectEntry(project3.getPath()));
@@ -3405,7 +3405,7 @@ public void testBug519151_021() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"    requires third;\n"+
@@ -3419,7 +3419,7 @@ public void testBug519151_021() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3462,7 +3462,7 @@ public void testBug519151_022() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module first {\n" +
 			"}\n";
@@ -3474,7 +3474,7 @@ public void testBug519151_022() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module second {\n" +
 				"}\n";
@@ -3517,6 +3517,7 @@ public void testBug519151_023() throws Exception {
 				"}\n";
 		createFile("/second/src/module-info.java",	secondFile);
 		addLibraryEntry(project2, "/JavaSearchBugs/lib/lib519151.jar", false);
+		makeClasspathModular(project2);
 		project1.close(); // sync
 		project2.close(); // sync
 		project2.open(null);
@@ -3539,7 +3540,7 @@ public void _testBug519151_0X1() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3551,7 +3552,7 @@ public void _testBug519151_0X1() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3589,7 +3590,7 @@ public void _testBug519151_0X2() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3601,7 +3602,7 @@ public void _testBug519151_0X2() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3638,7 +3639,7 @@ public void _testBug519151_0X3() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3650,7 +3651,7 @@ public void _testBug519151_0X3() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3663,7 +3664,7 @@ public void _testBug519151_0X3() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3703,7 +3704,7 @@ public void _testBug519151_0X4() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3715,7 +3716,7 @@ public void _testBug519151_0X4() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3728,7 +3729,7 @@ public void _testBug519151_0X4() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -3768,7 +3769,7 @@ public void testBug528059_001() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3780,7 +3781,7 @@ public void testBug528059_001() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3818,7 +3819,7 @@ public void testBug528059_002() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3830,7 +3831,7 @@ public void testBug528059_002() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3867,7 +3868,7 @@ public void testBug528059_003() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3879,7 +3880,7 @@ public void testBug528059_003() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3916,7 +3917,7 @@ public void testBug528059_004() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3928,7 +3929,7 @@ public void testBug528059_004() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -3965,7 +3966,7 @@ public void testBug528059_005() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -3977,7 +3978,7 @@ public void testBug528059_005() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4014,7 +4015,7 @@ public void testBug528059_006() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4026,7 +4027,7 @@ public void testBug528059_006() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4064,7 +4065,7 @@ public void testBug528059_007() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 		    " requires second;\n" +
@@ -4077,7 +4078,7 @@ public void testBug528059_007() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"  requires third;\n"+
@@ -4091,7 +4092,7 @@ public void testBug528059_007() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";
@@ -4131,7 +4132,7 @@ public void testBug530016_001() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4143,7 +4144,7 @@ public void testBug530016_001() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4181,7 +4182,7 @@ public void testBug530016_002() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4193,7 +4194,7 @@ public void testBug530016_002() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4230,7 +4231,7 @@ public void testBug530016_003() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4242,7 +4243,7 @@ public void testBug530016_003() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4279,7 +4280,7 @@ public void testBug530016_004() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4291,7 +4292,7 @@ public void testBug530016_004() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4328,7 +4329,7 @@ public void testBug530016_005() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4340,7 +4341,7 @@ public void testBug530016_005() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4377,7 +4378,7 @@ public void testBug530016_006() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 			"}\n";
@@ -4389,7 +4390,7 @@ public void testBug530016_006() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"}\n";
@@ -4427,7 +4428,7 @@ public void testBug530016_007() throws Exception {
 
 		IJavaProject project1 = createJavaProject("JavaSearchBugs9", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project1.open(null);
-		addClasspathEntry(project1, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project1);
 		String fileContent =
 			"module mod.first {\n" +
 		    " requires second;\n" +
@@ -4440,7 +4441,7 @@ public void testBug530016_007() throws Exception {
 
 		IJavaProject project2 = createJavaProject("second", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project2.open(null);
-		addClasspathEntry(project2, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project2);
 		String secondFile =
 				"module mod.second {\n" +
 				"  requires third;\n"+
@@ -4454,7 +4455,7 @@ public void testBug530016_007() throws Exception {
 
 		IJavaProject project3 = createJavaProject("third", new String[] {"src"}, new String[] {"JCL19_LIB"}, "bin", "9");
 		project3.open(null);
-		addClasspathEntry(project3, JavaCore.newContainerEntry(new Path("org.eclipse.jdt.MODULE_PATH")));
+		makeClasspathModular(project3);
 		String thirdFile =
 				"module third {\n" +
 				"}\n";

@@ -1248,4 +1248,64 @@ protected JavaSearchResultCollector resultCollector;
 		super.setUp();
 		this.resultCollector = new JavaSearchResultCollector();
 	}
+
+	protected static void makeClasspathModular(IJavaProject javaProject) throws JavaModelException {
+		IClasspathEntry[] classpath = javaProject.getRawClasspath();
+		boolean classpathChanged = false;
+		for (int i = 0; i < classpath.length; ++i) {
+			IClasspathEntry entry = classpath[i];
+			int kind = entry.getEntryKind();
+			if (kind == IClasspathEntry.CPE_PROJECT || kind == IClasspathEntry.CPE_LIBRARY || kind == IClasspathEntry.CPE_SOURCE || kind == IClasspathEntry.CPE_CONTAINER) {
+				boolean attributesChanged = false;
+				IClasspathAttribute[] attributes = entry.getExtraAttributes();
+				IClasspathAttribute[] newAttributes = attributes;
+				boolean hasModule = false;
+				for (int j = 0; j < attributes.length; ++j) {
+					if (IClasspathAttribute.MODULE.equals(attributes[j].getName())) {
+						hasModule = true;
+						if (!Boolean.toString(true).equals(attributes[j].getValue())) {
+							attributes[j] = JavaCore.newClasspathAttribute(IClasspathAttribute.MODULE, Boolean.toString(true));
+							attributesChanged = true;
+							break;
+						}
+					}
+				}
+				if (!hasModule) {
+					newAttributes = Arrays.copyOf(attributes, attributes.length + 1);
+					newAttributes[attributes.length] = JavaCore.newClasspathAttribute(IClasspathAttribute.MODULE, Boolean.toString(true));
+					attributesChanged = true;
+				}
+				if (attributesChanged) {
+					IClasspathEntry newEntry = copyEntryWithNewAttributes(entry, newAttributes);
+					classpath[i] = newEntry;
+					classpathChanged = true;
+				}
+			}
+		}
+		if (classpathChanged) {
+			javaProject.setRawClasspath(classpath, null);
+		}
+	}
+
+	private static IClasspathEntry copyEntryWithNewAttributes(IClasspathEntry entry, IClasspathAttribute[] newAttributes) {
+		int kind = entry.getEntryKind();
+		IClasspathEntry newEntry;
+		switch(kind) {
+		case IClasspathEntry.CPE_PROJECT:
+			newEntry = JavaCore.newProjectEntry(entry.getPath(), entry.getAccessRules(), entry.combineAccessRules(), newAttributes, entry.isExported());
+			break;
+		case IClasspathEntry.CPE_LIBRARY:
+			newEntry = JavaCore.newLibraryEntry(entry.getPath(), entry.getSourceAttachmentPath(), entry.getSourceAttachmentRootPath(), entry.getAccessRules(), newAttributes, entry.isExported());
+			break;
+		case IClasspathEntry.CPE_SOURCE:
+			newEntry = JavaCore.newSourceEntry(entry.getPath(), entry.getInclusionPatterns(), entry.getExclusionPatterns(), entry.getOutputLocation(), newAttributes);
+			break;
+		case IClasspathEntry.CPE_CONTAINER:
+			newEntry = JavaCore.newContainerEntry(entry.getPath(), entry.getAccessRules(), newAttributes, entry.isExported());
+			break;
+		default:
+			throw new IllegalStateException("Unexpected classpath entry kind: " + kind + ", for entry: " + entry);
+		}
+		return newEntry;
+	}
 }
