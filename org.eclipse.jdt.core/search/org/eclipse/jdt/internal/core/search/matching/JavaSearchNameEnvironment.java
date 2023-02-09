@@ -74,6 +74,11 @@ public class JavaSearchNameEnvironment implements IModuleAwareNameEnvironment, S
 	Map<String, org.eclipse.jdt.core.ICompilationUnit> workingCopies;
 
 public JavaSearchNameEnvironment(IJavaProject javaProject, org.eclipse.jdt.core.ICompilationUnit[] copies) {
+	this(null, javaProject, copies);
+}
+private final IJavaProject mainProject;
+public JavaSearchNameEnvironment(IJavaProject mainProject, IJavaProject javaProject, org.eclipse.jdt.core.ICompilationUnit[] copies) {
+	this.mainProject = mainProject;
 	if (isComplianceJava9OrHigher(javaProject)) {
 		this.moduleLocations = new HashMap<>();
 		this.moduleToClassPathLocations = new HashMap<>();
@@ -290,7 +295,19 @@ private ClasspathLocation mapToClassPathLocation(JavaModelManager manager, Packa
 				 * Source classpath entries of a project never have the module attribute set,
 				 * so we cannot rely on the attribute.
 				 */
-				isOnModulePath = isModularProject(javaProject);
+				if (this.mainProject != null && this.mainProject != javaProject) {
+					IClasspathEntry[] mainClasspath = this.mainProject.getRawClasspath();
+					for (IClasspathEntry entry : mainClasspath) {
+						if (entry.getEntryKind() == IClasspathEntry.CPE_PROJECT) {
+							if (javaProject.getProject().getFullPath().isPrefixOf(entry.getPath())) {
+								isOnModulePath = ClasspathEntry.isModular(entry);
+								break;
+							}
+						}
+					}
+				} else {
+					isOnModulePath = isModularProject(javaProject);
+				}
 			} else {
 				isOnModulePath = ClasspathEntry.isModular(classpathEntry);
 			}

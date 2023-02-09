@@ -24,7 +24,7 @@ public class IndexBasedJavaSearchEnvironment {
 
 	public static INameEnvironment create(List<IJavaProject> javaProjects, org.eclipse.jdt.core.ICompilationUnit[] copies) {
 		Iterator<IJavaProject> next = javaProjects.iterator();
-		JavaSearchNameEnvironment result = new JavaSearchNameEnvironment(next.next(), copies);
+		JavaSearchNameEnvironment result = new JavaSearchNameEnvironment(javaProjects.get(0), next.next(), copies);
 
 		while (next.hasNext()) {
 			result.addProjectClassPath((JavaProject)next.next());

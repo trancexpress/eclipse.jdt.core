@@ -2283,7 +2283,7 @@ public void testBug519980_001() throws Exception {
 				"package pack22;\n" +
 				"public interface I22 {}\n");
 
-		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		addModularProjectEntry(project1, project2);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
@@ -2331,7 +2331,7 @@ public void testBug519980_002() throws Exception {
 				"package pack22;\n" +
 				"public interface I22 {}\n");
 
-		addClasspathEntry(project1, JavaCore.newProjectEntry(project2.getPath()));
+		addModularProjectEntry(project1, project2);
 		project1.close(); // sync
 		project2.close();
 		project2.open(null);
