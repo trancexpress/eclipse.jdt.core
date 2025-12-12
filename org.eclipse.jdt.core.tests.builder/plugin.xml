@@ -9,7 +9,7 @@
     https://www.eclipse.org/legal/epl-2.0/
 
     SPDX-License-Identifier: EPL-2.0
-    
+
     Contributors:
         IBM Corporation - initial API and implementation
  -->
@@ -42,4 +42,15 @@
           <requires id="org.eclipse.jdt.core.tests.builder.participants.testCompilationParticipant2"/>
        </compilationParticipant>
    </extension>
+
+<extension
+	point="org.eclipse.core.resources.builders"
+	id="jdt_tests_customjavabuilder"
+	name="JDT Tests Custom Java Builder">
+	<builder>
+		<run class="org.eclipse.jdt.core.tests.builder.custom.CustomJavaBuilder">
+		</run>
+		<dynamicReference class="org.eclipse.jdt.internal.core.DynamicProjectReferences"/>
+	</builder>
+</extension>
 </plugin>

@@ -1093,7 +1093,7 @@ public void cleanBuild(String projectName) {
 		removeEntry(projectPath, jarPath);
 	}
 
-	private void removeEntry(IPath projectPath, IPath entryPath) throws JavaModelException {
+	public void removeEntry(IPath projectPath, IPath entryPath) throws JavaModelException {
 		checkAssertion("a workspace must be open", this.isOpen); //$NON-NLS-1$
 		IClasspathEntry[] oldEntries = getRawClasspath(projectPath);
 		for (int i = 0; i < oldEntries.length; ++i) {

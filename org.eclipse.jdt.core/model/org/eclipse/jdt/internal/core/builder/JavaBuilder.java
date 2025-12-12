@@ -74,7 +74,6 @@ public static final String SOURCE_ID = "JDT"; //$NON-NLS-1$
 
 public static boolean DEBUG = false;
 public static boolean SHOW_STATS = false;
-
 /**
  * Bug 549457: In case auto-building on a JDT core settings change (e.g. compiler compliance) is not desired,
  * specify VM property: {@code -Dorg.eclipse.disableAutoBuildOnSettingsChange=true}
@@ -562,7 +561,7 @@ private boolean hasJdtCoreSettingsChange(Map<IProject, IResourceDelta> deltas) {
 	return resourceDelta.findMember(JDT_CORE_SETTINGS_PATH) != null;
 }
 
-private boolean hasClasspathChanged() {
+protected boolean hasClasspathChanged() {
 	return hasClasspathChanged(CompilationGroup.MAIN) || hasClasspathChanged(CompilationGroup.TEST);
 }
 
