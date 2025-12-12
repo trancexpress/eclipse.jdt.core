@@ -75,6 +75,7 @@ public static final String SOURCE_ID = "JDT"; //$NON-NLS-1$
 public static boolean DEBUG = false;
 public static boolean SHOW_STATS = false;
 
+private static final String IGNORE_CLASSPATH_CHANGES_ON_INCREMENTAL_BUILD = "org.eclipse.jdt.core.ignoreClasspathChangesOnIncrementalBuild"; //$NON-NLS-1$
 /**
  * Bug 549457: In case auto-building on a JDT core settings change (e.g. compiler compliance) is not desired,
  * specify VM property: {@code -Dorg.eclipse.disableAutoBuildOnSettingsChange=true}
@@ -222,7 +223,7 @@ protected IProject[] build(int kind, Map<String, String> ignoredArgs, IProgressM
 						trace("JavaBuilder: Performing full build since last saved state was not found"); //$NON-NLS-1$
 					}
 					buildAll();
-				} else if (hasClasspathChanged()) {
+				} else if (hasClasspathChanged() && !Boolean.getBoolean(IGNORE_CLASSPATH_CHANGES_ON_INCREMENTAL_BUILD)) {
 					// if the output location changes, do not delete the binary files from old location
 					// the user may be trying something
 					if (DEBUG) {
